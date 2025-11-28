@@ -9,109 +9,55 @@ import { GestionApi } from 'src/app/services/gestion-api';
   standalone: false
 })
 export class PieChartComponent  implements OnInit {
-
-  //Pasamos solo el valor de los colores de fondo desde la page home.
+ 
   @Input() backgroundColorCat: string[] = [];
-  
-   // Atributo que almacena los datos del chart
-  public chart!: Chart;
+  // Atributo que almacena los datos del chart
+  public chart: any;
 
-   //Crearemos un objeto para poder mostrar los valores de categoria y totalResults que se recibiran desde la api  public apiData: { categoria: string; totalResults: number }[] = [];
-  public apiData: { categoria: string; totalResults: number }[] = [];
-
-  constructor(private el: ElementRef, private renderer: Renderer2, private gestionServiceApi: GestionApi) { }
-
-  ngOnInit(): void { 
-    console.log("Ejecuta pie-chart");
-    this.inicializarChart();
-
-    //Nos suscribimos al observable de tipo BehaviorSubject y cuando este emita un valor, recibiremos una notificación con el nuevo valor.
-    this.gestionServiceApi.datos$.subscribe((datos) => {
-      if (datos != undefined) {
-        //Cuando recibimos un valor actualizamos los arrays de nombre y valor de categorias, para guardar el nombre y su valor en las mismas posiciones del array.
-        this.actualizarDatosChart(datos.categoria, datos.totalResults);
-        //Actualizamos el chart con los nuevos valores cada vez que recibimos un valor.
-        this.actualizarChart();
-      }
-    });
+  constructor(private el: ElementRef, private renderer: Renderer2) {}
+ 
+  ngOnInit(): void {
+      this.inicializarChart();
   }
 
-  ngOnDestroy(): void {
-    this.destruirChart();
-  }
-  
-  private inicializarChart() {
-    const datasetsByCompany: { 
-        data: number[]; 
-        backgroundColor: string[]; 
-      }[]= [];
-  
-      // Creamos la gráfica
+  private inicializarChart(){
+    
+    const data = {
+      labels: [
+        'Red',
+        'Green',
+        'Yellow',
+        'Grey',
+        'Blue'
+      ],
+      datasets: [{
+        label: 'My First Dataset',
+        data: [11, 16, 7, 3, 14],
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(75, 192, 192)',
+          'rgb(255, 205, 86)',
+          'rgb(201, 203, 207)',
+          'rgb(54, 162, 235)'
+        ]
+      }]
+    };
+
+    // Creamos la gráfica
     const canvas = this.renderer.createElement('canvas');
-    this.renderer.setAttribute(canvas, 'id', 'pieChart');
+    this.renderer.setAttribute(canvas, 'id', 'lineChart');
   
-    // Añadimos el canvas al div con id "ontenedor-barchart"
+    // Añadimos el canvas al div con id "chartContainer"
     const container = this.el.nativeElement.querySelector('#contenedor-piechart');
     this.renderer.appendChild(container, canvas);
-  
+ 
+     // Creamos la gráfica
     this.chart = new Chart(canvas, {
       type: 'pie' as ChartType, // tipo de la gráfica 
-      data: {
-        labels: [], // etiquetas vacías inicialmente
-        datasets: datasetsByCompany, // datasets vacíos inicialmente
-      }
+      data: data, // datos 
     });
-      //Ancho y alto de canvas
-    this.chart.canvas.width = 100;
-    this.chart.canvas.height = 100;
   }
-  
-  // Método para actualizar el chart con los nuevos datos
-  private actualizarDatosChart(categoria: string, totalResults: number) {
-    this.apiData.push({ categoria, totalResults });
-  }
+ 
 
-  private actualizarChart() {
-    const datasetsByCompany: { 
-      [key: string]: { 
-        label: string; 
-        data: number[]; 
-        backgroundColor: string[]; 
-     } 
-    } = {};
-
-    this.apiData.forEach((row: { categoria: string; totalResults: number }, index: number)=> {
-      const categoria = row.categoria;
-      const totalResults = row.totalResults;
-
-      if (!datasetsByCompany[categoria]) {
-        datasetsByCompany[categoria] = {
-          label: 'Valores de ' + categoria,
-          data: [],
-          backgroundColor: [this.backgroundColorCat[index]]
-      };
-    }
-      //Asociamos los valores al dataSetByCompany  
-      datasetsByCompany[categoria].data[index] = totalResults;
-      datasetsByCompany[categoria].backgroundColor[index] = this.backgroundColorCat[index];
-    });
-    
-    this.chart.data.labels = [];
-    
-    this.apiData.forEach((row: { categoria: string; totalResults: number }) => {
-      if (this.chart.data.labels){
-        this.chart.data.labels.push(row.categoria);
-      }
-    });
-
-    this.chart.data.datasets = Object.values(datasetsByCompany);
-    this.chart.update();
-  }
-
-  destruirChart() {
-    if (this.chart) {
-      this.chart.destroy();
-    }
-  }
 
 }

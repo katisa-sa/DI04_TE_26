@@ -6,6 +6,7 @@ import { HomePage } from './home.page';
 
 import { HomePageRoutingModule } from './home-routing.module';
 import { ComponentsModule } from '../components/components-module';
+import { BarChartComponent } from "../components/bar-chart/bar-chart.component";
 
 
 @NgModule({
@@ -14,8 +15,8 @@ import { ComponentsModule } from '../components/components-module';
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    ComponentsModule
-  ],
+    ComponentsModule,
+],
   declarations: [HomePage]
 })
 export class HomePageModule {}

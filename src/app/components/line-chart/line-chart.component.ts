@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 import { Chart, ChartType } from 'chart.js/auto';
+import { GestionApi } from 'src/app/services/gestion-api';
 
 @Component({
   selector: 'app-line-chart',
@@ -9,7 +10,7 @@ import { Chart, ChartType } from 'chart.js/auto';
 })
 export class LineChartComponent  implements OnInit {
 
-  // Atributo que almacena los datos del chart
+ // Atributo que almacena los datos del chart
   public chart!: Chart;
  
   constructor(private el: ElementRef, private renderer: Renderer2) {}
@@ -17,10 +18,6 @@ export class LineChartComponent  implements OnInit {
   ngOnInit(): void {
     console.log("Ejecuta line-chart")
     this.inicializarChart();
-  }
-
-  ngOnDestroy(): void {
-   this.destruirChart();
   }
 
   private inicializarChart(){
@@ -71,11 +68,5 @@ export class LineChartComponent  implements OnInit {
     });
     this.chart.canvas.width = 100;
     this.chart.canvas.height = 100;
-  }
-
-  destruirChart() {
-    if (this.chart) {
-      this.chart.destroy();
-    }
   }
 }

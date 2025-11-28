@@ -22,13 +22,16 @@
   <ion-grid *ngIf="tipoDeChartSeleccionado === 'bart-chart'">
     <ion-row>
       <ion-col>
-        <app-bart-chart></app-bart-chart>
+        <app-bar-chart
+        [backgroundColorCat]="backgroundColorCat"
+        [borderColorCat]="borderColorCat"></app-bar-chart>
       </ion-col>
       <ion-col>
           <app-line-chart></app-line-chart>
       </ion-col>
       <ion-col>
-          <app-pie-chart></app-pie-chart>
+          <app-pie-chart>
+        </app-pie-chart>
       </ion-col>
     </ion-row>
   </ion-grid>
