@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
-import { Chart, ChartType } from 'chart.js';
+import { Chart, ChartType } from 'chart.js/auto';
 
 @Component({
   selector: 'app-line-chart',
@@ -17,6 +17,10 @@ export class LineChartComponent  implements OnInit {
   ngOnInit(): void {
     console.log("Ejecuta line-chart")
     this.inicializarChart();
+  }
+
+  ngOnDestroy(): void {
+   this.destruirChart();
   }
 
   private inicializarChart(){
@@ -67,5 +71,11 @@ export class LineChartComponent  implements OnInit {
     });
     this.chart.canvas.width = 100;
     this.chart.canvas.height = 100;
+  }
+
+  destruirChart() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
   }
 }

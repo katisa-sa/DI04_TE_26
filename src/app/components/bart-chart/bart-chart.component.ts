@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
-import { Chart, ChartType } from 'chart.js';
+import { Chart, ChartType } from 'chart.js/auto';
 import { GestionApi } from 'src/app/services/gestion-api';
 
 @Component({
@@ -36,58 +36,13 @@ export class BartChartComponent  implements OnInit {
     });
   }
 
-  private inicializarChart() {
-    const datasetsByCompany: { 
-        label: string; 
-        data: number[]; 
-        backgroundColor: string[]; 
-        borderColor: string[]; 
-        borderWidth: number;
-      }[]= [];
-  
-    // Creamos la gráfica
-    const canvas = this.renderer.createElement('canvas');
-    this.renderer.setAttribute(canvas, 'id', 'barChart');
-  
-    // Añadimos el canvas al div con id "ontenedor-barchart"
-    const container = this.el.nativeElement.querySelector('#contenedor-barchart');
-    this.renderer.appendChild(container, canvas);
-  
-    this.chart = new Chart(canvas, {
-      type: 'bart' as ChartType, // tipo de la gráfica 
-      data: {
-        labels: [], // etiquetas vacías inicialmente
-        datasets: datasetsByCompany // datasets vacíos inicialmente
-      }, // datos 
-      options: { // opciones de la gráfica
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        },
-        plugins: {
-          legend: {
-            labels: {
-              boxWidth: 0,
-              font: {
-                size: 16,
-                weight: 'bold'
-              }
-            },
-          }
-        },
-      }
-    });
-    //Ancho y alto de canvas
-    this.chart.canvas.width = 100;
-    this.chart.canvas.height = 100;
-  }
-
   // Método para actualizar el chart con los nuevos datos
   private actualizarDatosChart(categoria: string, totalResults: number) {
+    const datosExisten = this.apiData.find(data => data.categoria === categoria);
+    if (!datosExisten) {
+      // Si no existe, actualizamos el totalResults
     this.apiData.push({ categoria, totalResults });
+    }
   }
 
   // Método para actualizar el chart con colores, texto y valores
@@ -129,6 +84,58 @@ export class BartChartComponent  implements OnInit {
 
     this.chart.data.datasets = Object.values(datasetsByCompany);
     this.chart.update();
+  }
+
+  private inicializarChart() {
+    const datasetsByCompany: { 
+        label: string; 
+        data: number[]; 
+        backgroundColor: string[]; 
+        borderColor: string[]; 
+        borderWidth: number;
+      }[]= [];
+  
+    // Creamos la gráfica
+    const canvas = this.renderer.createElement('canvas');
+    this.renderer.setAttribute(canvas, 'id', 'barChart');
+  
+    // Añadimos el canvas al div con id "ontenedor-barchart"
+    const container = this.el.nativeElement.querySelector('#contenedor-barchart');
+    this.renderer.appendChild(container, canvas);
+  
+    this.chart = new Chart(canvas, {
+      type: 'bar' as ChartType, // tipo de la gráfica 
+      data: {
+        labels: [], // etiquetas vacías inicialmente
+        datasets: datasetsByCompany // datasets vacíos inicialmente
+      }, // datos 
+      options: { // opciones de la gráfica
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            stacked: true,
+          },
+          y: {
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          legend: {
+            labels: {
+              boxWidth: 0,
+              font: {
+                size: 16,
+                weight: 'bold'
+              }
+            },
+          }
+        },
+      }
+    });
+    //Ancho y alto de canvas
+    this.chart.canvas.width = 100;
+    this.chart.canvas.height = 100;
   }
 
 

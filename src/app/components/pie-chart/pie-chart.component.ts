@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
-import { Chart, ChartType } from 'chart.js';
+import { Chart, ChartType } from 'chart.js/auto';
 import { GestionApi } from 'src/app/services/gestion-api';
 
 @Component({
@@ -34,6 +34,10 @@ export class PieChartComponent  implements OnInit {
         this.actualizarChart();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destruirChart();
   }
   
   private inicializarChart() {
@@ -102,6 +106,12 @@ export class PieChartComponent  implements OnInit {
 
     this.chart.data.datasets = Object.values(datasetsByCompany);
     this.chart.update();
+  }
+
+  destruirChart() {
+    if (this.chart) {
+      this.chart.destroy();
+    }
   }
 
 }
