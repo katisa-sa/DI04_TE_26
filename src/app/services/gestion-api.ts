@@ -22,6 +22,7 @@ export class GestionApi {
       if (data && data.totalResults !== undefined) {
         //Mediante datosSubject.next, avisamos a todos los suscriptores (en este caso datos$) de que hemos recibido un nuevo valor.
         this.datosSubject.next({ categoria: categoria, totalResults: data.totalResults });
+        
       } else {
         console.error('La propiedad totalResults no está definida en la respuesta:', data);
       }  

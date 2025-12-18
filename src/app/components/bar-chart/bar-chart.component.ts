@@ -24,6 +24,7 @@ export class BarChartComponent  implements OnInit {
 
   ngOnInit() : void {
     console.log("Ejecuta bar-chart");
+    this.apiData = [];
     this.inicializarChart();
 
     //Nos suscribimos al observable de tipo BehaviorSubject y cuando este emita un valor, recibiremos una notificación con el nuevo valor.
@@ -43,10 +44,11 @@ export class BarChartComponent  implements OnInit {
   // Método para actualizar el chart con los nuevos datos
   private actualizarDatosChart(categoria: string, totalResults: number) {
     const datosExisten = this.apiData.find(data => data.categoria === categoria);
-    if (datosExisten) {
-      datosExisten.totalResults = totalResults;
-    } else {
+    if (!datosExisten) {
       this.apiData.push({ categoria, totalResults });
+    } else {
+      //Si ya existe la categoría, actualizamos su valor
+      datosExisten.totalResults = totalResults;
     }
   }
 
@@ -105,7 +107,7 @@ export class BarChartComponent  implements OnInit {
     const canvas = this.renderer.createElement('canvas');
     this.renderer.setAttribute(canvas, 'id', 'barChart');
   
-    // Añadimos el canvas al div con id "ontenedor-barchart"
+    // Añadimos el canvas al div con id "contenedor-barchart"
     const container = this.el.nativeElement.querySelector('#contenedor-barchart');
     this.renderer.appendChild(container, canvas);
   

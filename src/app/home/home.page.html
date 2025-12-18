@@ -19,12 +19,12 @@
 
 <ion-content [fullscreen]="true">
     <!--En el segmento "Bar-Chart" mostraremos las tres gráficas-->
-  <ion-grid *ngIf="tipoDeChartSeleccionado === 'bart-chart'">
+  <ion-grid *ngIf="tipoDeChartSeleccionado === 'bar-chart'">
     <ion-row>
       <ion-col>
         <app-bar-chart
-        [backgroundColorCat]="backgroundColorCat"
-        [borderColorCat]="borderColorCat"></app-bar-chart>
+        [backgroundColorCat]="backgroundColorCategoria"
+        [borderColorCat]="borderColorCategoria"></app-bar-chart>
       </ion-col>
       <ion-col>
           <app-line-chart></app-line-chart>
